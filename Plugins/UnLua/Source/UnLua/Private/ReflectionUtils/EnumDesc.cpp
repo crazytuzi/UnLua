@@ -27,7 +27,11 @@ void FEnumDesc::Load()
     if (Enum.IsValid())
         return;
 
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1
+    Enum = FindFirstObject<UEnum>(*EnumName);
+#else
     Enum = FindObject<UEnum>(ANY_PACKAGE, *EnumName);
+#endif
     if (!Enum.IsValid())
         Enum = LoadObject<UEnum>(nullptr, *EnumName);
 

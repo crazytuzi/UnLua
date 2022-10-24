@@ -276,11 +276,19 @@ namespace UnLua
         FString Name = UTF8_TO_TCHAR(InName);
 
         // find candidates in memory
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1
+        UField* Ret = FindFirstObject<UClass>(*Name);
+        if (!Ret)
+            Ret = FindFirstObject<UScriptStruct>(*Name);
+        if (!Ret)
+            Ret = FindFirstObject<UEnum>(*Name);
+#else
         UField* Ret = FindObject<UClass>(ANY_PACKAGE, *Name);
         if (!Ret)
             Ret = FindObject<UScriptStruct>(ANY_PACKAGE, *Name);
         if (!Ret)
             Ret = FindObject<UEnum>(ANY_PACKAGE, *Name);
+#endif
 
         // load candidates if not found
         if (!Ret)

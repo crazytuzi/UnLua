@@ -53,7 +53,11 @@ public:
     {
         if (!bInitialized)
         {
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1
+            UEnum* Enum = FindFirstObject<UEnum>(*TypeName);
+#else
             UEnum* Enum = FindObjectChecked<UEnum>(ANY_PACKAGE, *TypeName);
+#endif
             Value = Enum->GetValueByIndex(Index);
             bInitialized = true;
         }

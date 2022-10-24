@@ -21,7 +21,11 @@ public:
     FPropertyCreator()
         : ScriptStruct(nullptr)
     {
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1
+        ScriptStruct = FindFirstObject<UScriptStruct>(TEXT("PropertyCollector"));
+#else
         ScriptStruct = FindObject<UScriptStruct>(ANY_PACKAGE, TEXT("PropertyCollector"));
+#endif
 
         // ScriptStruct->CreateCluster() fail to create a cluster...
         int32 RootInternalIndex = GUObjectArray.ObjectToIndex(ScriptStruct);

@@ -226,7 +226,11 @@ namespace UnLua
         if (ClassNamePtr)
         {
             FString ClassName(ClassNamePtr);
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1
+            UStruct *Struct = FindFirstObject<UStruct>(*ClassName + 1);
+#else
             UStruct *Struct = FindObject<UStruct>(ANY_PACKAGE, *ClassName + 1);
+#endif
             if (Struct)
             {
                 // the userdata is a struct instance
