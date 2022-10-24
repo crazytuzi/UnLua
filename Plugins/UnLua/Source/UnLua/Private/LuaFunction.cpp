@@ -28,7 +28,11 @@ static UClass* MakeOrphanedClass(const UClass* Class)
     FString OrphanedClassString = FString::Printf(TEXT("ORPHANED_DATA_ONLY_%s"), *Class->GetName());
     FName OrphanedClassName = MakeUniqueObjectName(GetTransientPackage(), UBlueprintGeneratedClass::StaticClass(), FName(*OrphanedClassString));
     UClass* OrphanedClass = NewObject<UBlueprintGeneratedClass>(GetTransientPackage(), OrphanedClassName, RF_Public | RF_Transient);
+#if ENGINE_MAJOR_VERSION == 5 && ENGINE_MINOR_VERSION >= 1
+    OrphanedClass->CppClassStaticFunctions = Class->CppClassStaticFunctions;
+#else
     OrphanedClass->ClassAddReferencedObjects = Class->AddReferencedObjects;
+#endif
     OrphanedClass->ClassFlags |= CLASS_CompiledFromBlueprint;
 #if WITH_EDITOR
     OrphanedClass->ClassGeneratedBy = Class->ClassGeneratedBy;
